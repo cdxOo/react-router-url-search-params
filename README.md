@@ -13,7 +13,7 @@ Requires 'react-router' 5.x and 'react' >= 16.8 as peer dependencies.
 
 ```jsx
 import React from 'react';
-import useURLSearchParams from '@cdxoo/react-router-url-search-params';
+import { useURLSearchParams } from '@cdxoo/react-router-url-search-params';
 
 // in this component updateQuery pushes the history with
 // the updated search params when button is clicked
