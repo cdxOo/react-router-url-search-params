@@ -35,7 +35,7 @@ const MyComponent = () => {
 // you can disable the automatic history push in updateQuery
 // in case you want to use the updated search query string elsewhere
 // e.g. in <a href='...'>
-const OtherComponent = () => {
+const MyOtherComponent = () => {
     let [ query, updateQuery ] = useURLSearchParams({ defaults: {
         foo: 'bar',
     }});

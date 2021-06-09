@@ -12,6 +12,7 @@
   },
   "keywords": [
     "react",
+    "react-hooks",
     "react-router",
     "url-search-params",
     "query-string"
