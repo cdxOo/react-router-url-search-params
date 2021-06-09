@@ -43,7 +43,7 @@ const MyOtherComponent = () => {
         foo: 'bar',
     }});
 
-    let nextSearchQuery = updateQuery({ other: 'next' })
+    let nextSearchQuery = updateQuery({ other: 'next' }, { push: false })
     return (
         <div>
             <div>{ query.foo }</div>
