@@ -30,7 +30,7 @@ const useURLSearchParams = () => {
         return stringified;
     }, [ history, location ])
 
-    return [ paramsPojo, updateParams ];
+    return [ paramsPOJO, updateParams ];
 }
 
 export default useURLSearchParams;
