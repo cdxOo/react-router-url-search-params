@@ -1,12 +1,13 @@
 {
   "name": "@cdxoo/react-router-url-search-params",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Hook to access and update url search params in conjunction with react-router",
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "scripts": {
     "test": "npx jest",
-    "build": "npx rollup -c"
+    "build": "npx rollup -c",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
