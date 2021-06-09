@@ -1,0 +1,36 @@
+{
+  "name": "@cdxoo/react-router-url-search-params",
+  "version": "1.0.0",
+  "description": "Hook to access and update url search params in conjunction with react-router",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cdxOo/react-router-url-search-params.git"
+  },
+  "keywords": [
+    "react",
+    "react-router",
+    "url-search-params",
+    "query-string"
+  ],
+  "author": "Jan Schwalbe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cdxOo/react-router-url-search-params/issues"
+  },
+  "homepage": "https://github.com/cdxOo/react-router-url-search-params#readme",
+  "peerDependencies": {
+    "react": ">=16.8",
+    "react-router": "5.x"
+  },
+  "devDependencies": {
+    "react": ">=16.8",
+    "react-router": "5.x"
+  },
+  "dependencies": {
+    "url-search-params-polyfill": "^8.1.1"
+  }
+}
