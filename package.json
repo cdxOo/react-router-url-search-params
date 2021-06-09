@@ -1,6 +1,6 @@
 {
   "name": "@cdxoo/react-router-url-search-params",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Hook to access and update url search params in conjunction with react-router",
   "main": "cjs/index.js",
   "module": "esm/index.js",

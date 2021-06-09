@@ -2,7 +2,7 @@ import 'url-search-params-polyfill';
 import { useMemo, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router';
 
-const useURLSearchParams = ({
+export const useURLSearchParams = ({
     defaults
 } = {}) => {
     let history = useHistory()
