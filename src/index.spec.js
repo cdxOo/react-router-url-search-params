@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { screen, render, fireEvent } from '@testing-library/react';
 //import '@testing-library/jest-dom/extend-expect'
@@ -57,5 +57,73 @@ describe('useURLSearchParams()', () => {
         expect(getByText('bar')).toBeTruthy();
         fireEvent.click(getByText('click'));
         expect(getByText('baz')).toBeTruthy();
+    });
+
+    test('updateQuery does not push history when disabled', () => {
+        const history = createHistory({
+            initialEntries: [ '/?foo=bar' ]
+        });
+
+        const Component = () => {
+            let [ query, updateQuery ] = useURLSearchParams();
+            let [ state, setState ] = useState('XXX');
+            let handle = () => {
+                let str = updateQuery({ foo: 'baz' }, { push: false });
+                setState(str);
+            }
+            return (
+                <div>
+                    <a onClick={ () => handle() }>click</a>
+                    <span>{ query.foo }</span>
+                    <span>{ state }</span>
+                </div>
+            )
+        }
+
+        const { getByText } = render(
+            <Router history={ history }>
+                <Route>
+                    <Component />
+                </Route>
+            </Router>
+        );
+
+        expect(getByText('bar')).toBeTruthy();
+        expect(getByText('XXX')).toBeTruthy();
+
+        fireEvent.click(getByText('click'));
+        
+        expect(getByText('bar')).toBeTruthy();
+        expect(getByText('foo=baz')).toBeTruthy();
+    })
+
+    test('merges given default values', () => {
+        const history = createHistory({
+            initialEntries: [ '/?foo=bar' ]
+        });
+
+        const Component = () => {
+            let [ query, updateQuery ] = useURLSearchParams({ defaults: {
+                user: 'alice',
+            }});
+            return (
+                <div>
+                    <span>{ query.foo }</span>
+                    <span>{ query.user }</span>
+                </div>
+            )
+        }
+
+        const { getByText } = render(
+            <Router history={ history }>
+                <Route>
+                    <Component />
+                </Route>
+            </Router>
+        );
+
+        expect(getByText('bar')).toBeTruthy();
+        expect(getByText('alice')).toBeTruthy();
+
     })
 });
