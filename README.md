@@ -3,6 +3,8 @@
 Hook to access and update url search params in conjunction with react-router.
 Uses URLSearchParams under the hood.
 
+Requires 'react-router' 5.x and 'react' >= 16.8 as peer dependencies.
+
 ## Installation
 
     npm install --save @cdxoo/react-router-url-search-params
