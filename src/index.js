@@ -17,7 +17,7 @@ export const useURLSearchParams = (bag = {}) => {
         }
 
         return paramsPOJO;
-    }, [ location, defaults ])
+    }, [ location ])
 
     let updateParams = useCallback((obj, options = {}) => {
         let {
