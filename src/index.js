@@ -2,9 +2,9 @@ import 'url-search-params-polyfill';
 import { useMemo, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router';
 
-export const useURLSearchParams = ({
-    defaults
-} = {}) => {
+export const useURLSearchParams = (bag = {}) => {
+    let { defaults } = bag;
+
     let history = useHistory()
     let location = useLocation();
 
@@ -19,14 +19,34 @@ export const useURLSearchParams = ({
         return paramsPOJO;
     }, [ location, defaults ])
 
-    let updateParams = useCallback((obj, { push = true } = {}) => {
+    let updateParams = useCallback((obj, options = {}) => {
+        let {
+            // TODO deprecate 'push true' in favor of action = 'none'
+            push = true,
+            action = 'push',
+        } = options;
+
         let stringified = (new URLSearchParams(obj)).toString();
         
-        if (push) {
-            history.push({
-                pathname: location.pathname,
-                search: stringified
-            });
+        switch (action) {
+            case 'push':
+                if (push) {
+                    history.push({
+                        pathname: location.pathname,
+                        search: stringified
+                    });
+                }
+                break;
+            case 'replace':
+                history.replace({
+                    pathname: location.pathname,
+                    search: stringified
+                });
+                break;
+            case 'none':
+                break;
+            default:
+                throw new Error(`unknown action "${action}"`);
         }
 
         return stringified;

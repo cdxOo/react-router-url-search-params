@@ -57,8 +57,41 @@ describe('useURLSearchParams()', () => {
         expect(getByText('bar')).toBeTruthy();
         fireEvent.click(getByText('click'));
         expect(getByText('baz')).toBeTruthy();
+
+        expect(history.entries.length).toEqual(2);
     });
 
+    test('replaces on updateQuery(..., { action: "replace" })', () => {
+         const history = createHistory({
+            initialEntries: [ '/?foo=bar' ]
+        });
+
+        const Component = () => {
+            let [ query, updateQuery ] = useURLSearchParams();
+            let handle = () => {
+                updateQuery({ foo: 'baz' }, { action: 'replace' })
+            }
+            return (
+                <div>
+                    <a onClick={ () => handle() }>click</a>
+                    { query.foo }
+                </div>)
+        }
+
+        const { getByText } = render(
+            <Router history={ history }>
+                <Route>
+                    <Component />
+                </Route>
+            </Router>
+        );
+
+        expect(getByText('bar')).toBeTruthy();
+        fireEvent.click(getByText('click'));
+        expect(getByText('baz')).toBeTruthy();
+
+        expect(history.entries.length).toEqual(1);
+    });
     test('updateQuery does not push history when disabled', () => {
         const history = createHistory({
             initialEntries: [ '/?foo=bar' ]
@@ -125,5 +158,44 @@ describe('useURLSearchParams()', () => {
         expect(getByText('bar')).toBeTruthy();
         expect(getByText('alice')).toBeTruthy();
 
+    })
+
+
+    test('updateQuery does not trigger history when action "none"', () => {
+        const history = createHistory({
+            initialEntries: [ '/?foo=bar' ]
+        });
+
+        const Component = () => {
+            let [ query, updateQuery ] = useURLSearchParams();
+            let [ state, setState ] = useState('XXX');
+            let handle = () => {
+                let str = updateQuery({ foo: 'baz' }, { action: 'none' });
+                setState(str);
+            }
+            return (
+                <div>
+                    <a onClick={ () => handle() }>click</a>
+                    <span>{ query.foo }</span>
+                    <span>{ state }</span>
+                </div>
+            )
+        }
+
+        const { getByText } = render(
+            <Router history={ history }>
+                <Route>
+                    <Component />
+                </Route>
+            </Router>
+        );
+
+        expect(getByText('bar')).toBeTruthy();
+        expect(getByText('XXX')).toBeTruthy();
+
+        fireEvent.click(getByText('click'));
+        
+        expect(getByText('bar')).toBeTruthy();
+        expect(getByText('foo=baz')).toBeTruthy();
     })
 });
