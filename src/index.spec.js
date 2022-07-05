@@ -198,4 +198,100 @@ describe('useURLSearchParams()', () => {
         expect(getByText('bar')).toBeTruthy();
         expect(getByText('foo=baz')).toBeTruthy();
     })
+    
+    test('handles mergedUpdate', () => {
+        const history = createHistory({
+            initialEntries: [ '/?foo=bar' ]
+        });
+
+        const Component = () => {
+            let [ query, updateQuery ] = useURLSearchParams();
+            let [ state, setState ] = useState('XXX');
+            let handle = () => {
+                let str = updateQuery(
+                    { qoox: 'hoox' },
+                    { mergedUpdate: true }
+                );
+                setState(str);
+            }
+            return (
+                <div>
+                    <a onClick={ () => handle() }>click</a>
+                    <span>{ query.foo } { query.qoox || 'XXX' }</span>
+                    <span>{ state }</span>
+                </div>
+            )
+        }
+
+        const { getByText } = render(
+            <Router history={ history }>
+                <Route>
+                    <Component />
+                </Route>
+            </Router>
+        );
+
+        expect(getByText('bar XXX')).toBeTruthy();
+        expect(getByText('XXX')).toBeTruthy();
+
+        fireEvent.click(getByText('click'));
+        
+        expect(getByText('bar hoox')).toBeTruthy();
+        expect(getByText('foo=bar&qoox=hoox')).toBeTruthy();
+    })
+    
+    test('handles custom parseReceived/prepareUpdate ', () => {
+        const history = createHistory({
+            initialEntries: [ '/?foo=bar' ]
+        });
+
+        const parseReceived = (obj) => {
+            var out = {};
+            for (var k of Object.keys(obj)) {
+                out[k] = obj[k] + '-parsed';
+            }
+            return out;
+        };
+        const prepareUpdate = (obj) => {
+            var out = {};
+            for (var k of Object.keys(obj)) {
+                out[k] = obj[k] + '-prepared';
+            }
+            return out;
+        }
+        const Component = () => {
+            let [ query, updateQuery ] = useURLSearchParams({
+                parseReceived,
+                prepareUpdate
+            });
+            let [ state, setState ] = useState('XXX');
+            let handle = () => {
+                let str = updateQuery({ foo: 'baz' });
+                setState(str);
+            }
+            return (
+                <div>
+                    <a onClick={ () => handle() }>click</a>
+                    <span>{ query.foo }</span>
+                    <span>{ state }</span>
+                </div>
+            )
+        }
+
+        const { getByText } = render(
+            <Router history={ history }>
+                <Route>
+                    <Component />
+                </Route>
+            </Router>
+        );
+
+        expect(getByText('bar-parsed')).toBeTruthy();
+        expect(getByText('XXX')).toBeTruthy();
+
+        fireEvent.click(getByText('click'));
+        
+        expect(getByText('baz-prepared-parsed')).toBeTruthy();
+        expect(getByText('foo=baz-prepared')).toBeTruthy();
+    })
 });

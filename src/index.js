@@ -2,13 +2,25 @@ import 'url-search-params-polyfill';
 import { useMemo, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router';
 
+const defaultParse = (queryRaw) => {
+    return queryRaw;
+}
+
+const defaultPrepare = (obj) => {
+    return obj;
+}
+
 export const useURLSearchParams = (bag = {}) => {
-    let { defaults } = bag;
+    let {
+        defaults,
+        parseReceived = defaultParse,
+        prepareUpdate = defaultPrepare,
+    } = bag;
 
     let history = useHistory()
     let location = useLocation();
 
-    let paramsPOJO = useMemo(() => {
+    let query = useMemo(() => {
         let params = new URLSearchParams(location.search);
         
         let paramsPOJO = { ...defaults };
@@ -16,17 +28,25 @@ export const useURLSearchParams = (bag = {}) => {
             paramsPOJO[key] = params.get(key);
         }
 
-        return paramsPOJO;
+        var parsed = parseReceived(paramsPOJO);
+
+        return parsed;
     }, [ location ])
 
-    let updateParams = useCallback((obj, options = {}) => {
+    let updateQuery = useCallback((obj, options = {}) => {
         let {
             // TODO deprecate 'push true' in favor of action = 'none'
             push = true,
             action = 'push',
+            mergedUpdate = false,
         } = options;
 
-        let stringified = (new URLSearchParams(obj)).toString();
+        if (mergedUpdate) {
+            obj = { ...query, ...obj };
+        }
+
+        var prepared = prepareUpdate(obj);
+        let stringified = (new URLSearchParams(prepared)).toString();
         
         switch (action) {
             case 'push':
@@ -52,7 +72,7 @@ export const useURLSearchParams = (bag = {}) => {
         return stringified;
     }, [ history, location ])
 
-    return [ paramsPOJO, updateParams ];
+    return [ query, updateQuery ];
 }
 
 export default useURLSearchParams;
