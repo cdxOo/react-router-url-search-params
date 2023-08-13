@@ -1,9 +1,19 @@
+hooks:
+  before:init: "npm test"
+  # NOTE: if after:bump fails package.json is already modfied
+  after:bump: "npm run build"
 git:
   commitMessage: "chore(release): v${version}"
   requireCommits: false
+  requireCleanWorkingDir: false
 github:
   release: false
   #releaseName: "${version}"
   #draft: true
 npm:
+  # NOTE: prepublishOnly output is hidden; if the hook fails
+  # package.json is already modified
   release: true
+  # NOTE: we dont use prepare npm hook, but this enables the output
+  publishArgs:
+    - "--foreground-scripts"

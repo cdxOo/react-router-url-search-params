@@ -8,7 +8,7 @@
     "test": "npx jest",
     "build": "npx rollup -c",
     "prepublishOnly": "npm test && npm run build",
-    "release:dry": "npx release-it --dry-run --no-npm",
+    "release:dry": "npx release-it --dry-run",
     "release:beta": "release-it --preRelease=beta",
     "release": "release-it"
   },
