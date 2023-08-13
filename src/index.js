@@ -23,14 +23,14 @@ export const useURLSearchParams = (bag = {}) => {
     let query = useMemo(() => {
         let params = new URLSearchParams(location.search);
         
-        let paramsPOJO = { ...defaults };
+        let paramsPOJO = {};
         for (let key of params.keys()) {
             paramsPOJO[key] = params.get(key);
         }
 
         var parsed = parseReceived(paramsPOJO);
 
-        return parsed;
+        return { ...defaults, ...parsed };
     }, [ location ])
 
     let updateQuery = useCallback((obj, options = {}) => {

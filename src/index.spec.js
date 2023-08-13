@@ -157,9 +157,45 @@ describe('useURLSearchParams()', () => {
 
         expect(getByText('bar')).toBeTruthy();
         expect(getByText('alice')).toBeTruthy();
-
     })
 
+    test('parseReceived() does not affect default values', () => {
+        const history = createHistory({
+            initialEntries: [ '/?foo=100' ]
+        });
+
+        const Component = () => {
+            let [ query, updateQuery ] = useURLSearchParams({
+                defaults: {
+                    date: new Date(42),
+                },
+                parseReceived: (query) => {
+                    let out = {};
+                    for (let key of Object.keys(query)) {
+                        out[key] = new Date(Number.parseFloat(query[key]));
+                    }
+                    return out;
+                }
+            });
+            return (
+                <div>
+                    <span>{ String(query.foo.getTime()) }</span>
+                    <span>{ String(query.date.getTime()) }</span>
+                </div>
+            )
+        }
+
+        const { getByText } = render(
+            <Router history={ history }>
+                <Route>
+                    <Component />
+                </Route>
+            </Router>
+        );
+
+        expect(getByText('100')).toBeTruthy();
+        expect(getByText('42')).toBeTruthy();
+    })
 
     test('updateQuery does not trigger history when action "none"', () => {
         const history = createHistory({
