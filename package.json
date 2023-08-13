@@ -7,7 +7,10 @@
   "scripts": {
     "test": "npx jest",
     "build": "npx rollup -c",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm test && npm run build",
+    "release:dry": "npx release-it --dry-run --no-npm",
+    "release:beta": "release-it --preRelease=beta",
+    "release": "release-it"
   },
   "files": [
     "cjs",
@@ -47,7 +50,8 @@
     "react-dom": ">=16.8",
     "react-router": "5.x",
     "rollup": "^2.51.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4"
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "release-it": "^15.11.0"
   },
   "dependencies": {
     "url-search-params-polyfill": "^8.1.1"
