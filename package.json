@@ -49,11 +49,12 @@
     "react": "^16.8",
     "react-dom": "^16.8",
     "react-router": "5.x",
+    "release-it": "^15.11.0",
     "rollup": "^2.79.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "release-it": "^15.11.0"
+    "rollup-plugin-peer-deps-external": "^2.2.4"
   },
   "dependencies": {
+    "jest-environment-jsdom": "^29.6.2",
     "url-search-params-polyfill": "^8.2.4"
   }
 }
